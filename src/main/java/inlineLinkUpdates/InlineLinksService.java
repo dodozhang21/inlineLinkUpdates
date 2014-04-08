@@ -14,6 +14,17 @@ public class InlineLinksService {
     private InlineLinksRepository inlineLinksRepository;
 
     public void addInlineLink(InlineLink inlineLink) {
+        // default values
+        inlineLink.setTopicTypeId(2);
+        // fill topic id
+        inlineLink.setTopicId(inlineLinksRepository.getNextInlineLinkTopicId());
+
+        inlineLink.setTopicName(StringUtils.trim(inlineLink.getTopicName()));
+
+        // figure out words in topic name
+        String[] words = StringUtils.split(inlineLink.getTopicName(), " ");
+        inlineLink.setNumWordsInTopic(words.length);
+
         inlineLinksRepository.addInlineLink(inlineLink);
     }
 

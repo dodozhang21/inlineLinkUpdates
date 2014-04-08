@@ -3,8 +3,10 @@ package inlineLinkUpdates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,19 +21,6 @@ public class InlineLinksController {
     public List<String> distinctSites() {
         return inlineLinksService.getDistinctSites();
     }
-
-//    @ModelAttribute("searchCriteria")
-//    public InlineLink searchCriteria() {
-//        InlineLink searchCriteria = new InlineLink();
-//        searchCriteria.setTopicTypeId(2);
-//        return searchCriteria;
-//    }
-//
-//    @ModelAttribute("pagination")
-//    public Pagination pagination() {
-//        Pagination pagination = new Pagination();
-//        return pagination;
-//    }
 
     @ModelAttribute("page")
     public InlineLinkUpdatesPage page() {
@@ -57,15 +46,29 @@ public class InlineLinksController {
         );
     }
 
-    @RequestMapping("/")
-    public String index(Model model) {
+    @ModelAttribute("newInlineLink")
+    public InlineLink newInlineLink() {
+        return new InlineLink();
+    }
 
+    @ModelAttribute("sitesForNewInlineLink")
+    public List<SelectOption> sitesForNewInlineLink() {
+        return Arrays.asList(
+                new SelectOption("", "")
+                ,new SelectOption("bhg", "bhg")
+                ,new SelectOption("parents", "parents")
+                ,new SelectOption("recipecom", "recipecom")
+        );
+    }
 
+    @RequestMapping(value = {"", "/"})
+    public String index() {
         return "inlineLinks";
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/search")
-    public String search(@ModelAttribute("page") InlineLinkUpdatesPage page, Model model) {
+    public String search(@ModelAttribute("page") InlineLinkUpdatesPage page
+            , final Model model) {
 
         List<InlineLink> results = inlineLinksService.searchInlineLinks(page.getSearchCriteria(), null, page.getPagination());
         model.addAttribute("results", results);
@@ -76,10 +79,24 @@ public class InlineLinksController {
     @RequestMapping(method = RequestMethod.GET, value = "/search/page/{pageNumber}")
     public String search(@ModelAttribute("page") InlineLinkUpdatesPage page
                             , @PathVariable int pageNumber
-                            , Model model) {
+                            , final Model model) {
         page.getPagination().setCurrentPage(pageNumber);
         List<InlineLink> results = inlineLinksService.searchInlineLinks(page.getSearchCriteria(), null, page.getPagination());
         model.addAttribute("results", results);
+
+        return "inlineLinks";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/add")
+    public String search(@Valid @ModelAttribute("newInlineLink") InlineLink newInlineLink
+            ,final BindingResult result
+            ,final Model model) {
+        if(result.hasErrors()) {
+            model.addAttribute("isAdd", true);
+            return "inlineLinks";
+        }
+
+        inlineLinksService.addInlineLink(newInlineLink);
 
         return "inlineLinks";
     }

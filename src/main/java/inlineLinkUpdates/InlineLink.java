@@ -2,18 +2,27 @@ package inlineLinkUpdates;
 
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 
 public class InlineLink implements Serializable {
     private int rowNumber;
     private String topicId;
+
+    @NotEmpty(message = "Topic Name may not be empty.")
     private String topicName;
+    @NotEmpty(message = "Topic URL may not be empty.")
     private String topicUrl;
+    @NotNull(message = "Priority may not be empty.")
+    @Min(value = 1)
     private Integer priority;
     private Integer topicTypeId;
     private Integer numWordsInTopic;
+    @NotEmpty(message = "Site may not be empty.")
     private String site;
 
     public int getRowNumber() {

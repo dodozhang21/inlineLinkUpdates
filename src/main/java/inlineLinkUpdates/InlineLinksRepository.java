@@ -24,6 +24,10 @@ public class InlineLinksRepository {
         return jdbcTemplate.queryForList(sql, String.class);
     }
 
+    public String getNextInlineLinkTopicId() {
+        return jdbcTemplate.queryForObject("select concat('app',to_char(inlineLinkUpdates_seq.nextval)) from dual", String.class);
+    }
+
     public void addInlineLink(InlineLink inlineLink) {
         String sql = "insert into mdp_topic(topic_id, topic_name, topic_url, priority, topic_type_id, num_words_in_topic, site) values (?, ?, ?, ?, ?, ?, ?)";
 
