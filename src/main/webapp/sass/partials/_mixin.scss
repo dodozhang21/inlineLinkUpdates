@@ -1,0 +1,41 @@
+@mixin strippedBackground($background-color: $tan,
+$color: $background-color,
+$foreground-color: $blue,
+$distance:$distance,
+$cut-distance:$cut-distance,
+$strips-size:6px,
+$strips-ratio:50%,
+$strips-angle:45deg) {
+
+  $bleeding-horizontal:10px;
+  $bleeding-vertical:0px;
+  top:-$bleeding-vertical - $distance;
+  left:-$bleeding-vertical - $distance;
+  bottom:-$bleeding-horizontal + $distance;
+  right:-$bleeding-horizontal + $distance;
+  z-index:1;
+
+  $size:$strips-ratio/2;
+  $halfSize:$size/2;
+  $p1:$halfSize;
+  $p2:50%-$halfSize;
+  $p3:50%+$halfSize;
+  $p4:100%-$halfSize;
+  $transparent:transparentize($color,1);
+  @include background-image(linear-gradient($strips-angle,$color $p1, $transparent $p1, $transparent $p2,$color $p2, $color $p3, $transparent $p3, $transparent $p4, $color $p4));
+  background-size:$strips-size $strips-size;
+}
+
+@mixin jQueryUiHover() {
+  display: inline-block;
+  border: 1px solid #77d5f7;
+  background: #0078ae url(//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/start/images/ui-bg_glass_45_0078ae_1x400.png) 50% 50% repeat-x;
+  font-weight: normal;
+  color: #ffffff;
+  &:hover {
+    border-color: lighten($blue, 10%);
+    background: $light-blue url(//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/start/images/ui-bg_glass_75_79c9ec_1x400.png) 50% 50% repeat-x;
+    color: $darker-blue;
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,285 @@
+@import url('//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/start/jquery-ui.css');
+@import url('//fonts.googleapis.com/css?family=Open+Sans|Cookie');
+
+@import "partials/init";
+
+
+//Variables here:
+//(alongside with commented suggestions)
+$green: #7eb644;
+$blue:#057bb0;
+$tan:#e8e3c7;
+$light-blue: #79c9ec;
+$darker-blue: #026890;
+$distance:6px;
+$cut-distance:2px;
+$shadow-color:$green;
+$background-color: $tan;
+$foreground-color: $blue;
+
+body {
+  font-size: 16px;
+  font-family: 'Open Sans', sans-serif;
+  background-color: $background-color;
+  padding: 1em 2em;
+}
+
+
+
+.dashed-shadow{
+  position:relative;
+  top:$distance;
+  left:$distance;
+  display:inline-block;
+  color:$shadow-color;
+  &:before{
+    content:" ";
+    display:block;
+
+    position:absolute;
+    @include strippedBackground;
+  }
+  &:after{
+    z-index:2;
+    content:attr(data-text);
+    position:absolute;
+    left:-$distance;
+    top:-$distance;
+    color:$foreground-color;
+    text-shadow:$cut-distance $cut-distance $background-color;
+  }
+}
+
+input, select {
+  font-size: 1em;
+  line-height: 1em;
+  padding: .1em;
+  border: 1px solid lighten($blue, 10%);
+  background-color: lighten($light-blue, 22%);
+  &:focus {
+    outline: none;
+  }
+}
+
+a {
+  color: $darker-blue;
+  &:hover {
+    color: $light-blue;
+  }
+  &:focus {
+    outline: none;
+  }
+}
+h1, h2 {
+  font-family: 'Cookie';
+  font-size:5em;
+  margin: 0 0 .2em 0;
+}
+
+h2 {
+  font-size: 2.5em;
+  &.searchResults {
+    margin: 1em 0 .5em 0;
+  }
+  margin-bottom: .5em;
+  position: relative;
+  color: $blue;
+  &:before {
+    content: '';
+    position: absolute;
+    @include strippedBackground($color: $green, $strips-size: 4px, $strips-ratio: 40%);
+    height: 20%;
+    top: auto;
+    bottom: -20%;
+  }
+
+}
+
+.hide {
+  display: none;
+}
+
+.buttons, .actions {
+  a:first-child, input:first-child {
+    margin-right: 1em;
+  }
+}
+
+#contents {
+  font-size: .9em;
+  padding: 0;
+  border: 0;
+  box-shadow: 0 0 10px rgba(darken($tan, 40%), .5);
+  ul {
+    border-radius: 5px 5px 0 0;
+  }
+  overflow: hidden;
+}
+#search, #add {
+  background-color: lighten($tan, 5%);
+}
+form {
+  max-width: 100%;
+  overflow: hidden;
+  @include box-sizing(border-box);
+  div {
+    float: left;
+    margin: .3em .2em;
+    width: 40%;
+
+    label {
+      width: 9em;
+      display: inline-block;
+      text-align: right;
+      padding-right: .3em;
+      white-space: nowrap;
+    }
+    &:nth-of-type(odd) {
+      clear: left;
+    }
+    &.buttons {
+      clear: left;
+      margin-left: 10em;
+      input {
+        width: auto;
+        margin: 1em 0 0 0;
+        padding: .5em .8em;
+        @include jQueryUiHover;
+      }
+    }
+  }
+}
+
+#results {
+  clear: both;
+  width: auto;
+  float: none;
+  header, footer {
+    overflow: hidden;
+    div {
+      float: left;
+      line-height: 2em;
+      margin: 0;
+      &:nth-of-type(odd) {
+        clear: none;
+      }
+      width: auto;
+      &.showing {
+        margin-left: 1em;
+      }
+      &.pagination {
+        float: right;
+
+        ul {
+          margin: 0;
+          padding: 0;
+          list-style: none;
+          li {
+            display: inline-block;
+            padding: 0 .3em;
+
+            a {
+              border-radius: 5px;
+              padding: 0 .5em 0.1em .5em;
+              border: 1px solid #acdd4a;
+              text-decoration: none;
+              background: #6eac2c url(//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/start/images/ui-bg_gloss-wave_50_6eac2c_500x100.png) 50% 50% repeat-x;
+              font-weight: normal;
+              color: #ffffff;
+              &:hover {
+                text-decoration: underline;
+              }
+              &.next, &.prev {
+                background: transparent;
+                color: $darker-blue;
+                border: 0;
+                padding: 0;
+                &:hover {
+                  text-shadow: 1px 1px 0 $green;
+                  text-decoration: none;
+                }
+              }
+            }
+            &.active {
+              font-weight: bold;
+              text-shadow: 1px 1px 0 $green;
+              .prev, .next {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+
+  }
+
+
+
+
+  table {
+    width: 100%;
+    margin: 1em 0;
+    border: 1px solid $darker-blue;
+    tr {
+
+      th, td {
+        font-size: .85em;
+        &:first-child {
+          padding-left: 1em;
+        }
+        &:last-child {
+          padding-right: 1em;
+        }
+      }
+      th {
+        white-space: nowrap;
+        &:first-child {
+          border-radius: 5px 0 0 0;
+        }
+        &:last-child {
+          border-radius: 0 5px 0 0;
+        }
+        background-color: $light-blue;
+      }
+      &:nth-of-type(odd) td {
+        background-color: lighten($green, 20%);
+      }
+      &:nth-of-type(even) td {
+        background-color: lighten($light-blue, 20%);
+      }
+
+
+      &:hover td, &:nth-of-type(odd):hover td, &:nth-of-type(even):hover td {
+        background-color: darken($tan, 10%);
+      }
+
+      &:last-child td {
+        &:first-child {
+          border-radius: 0 0 0 5px;
+        }
+        &:last-child {
+          border-radius: 0 0 5px 0;
+        }
+      }
+    }
+    th,td {
+      text-align: left;
+      padding: .5em;
+    }
+    td.topicUrl {
+      width: 20%;
+      span {
+        word-wrap: break-word;
+      }
+    }
+    .actions {
+      a {
+        padding: .3em .5em;
+        font-size: .9em;
+        @include jQueryUiHover;
+      }
+    }
+  }
+
+}

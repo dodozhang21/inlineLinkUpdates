@@ -1,13 +1,197 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Serving Web Content</title>
+    <title>Inline Link Updates</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" th:href="@{/css/test.css}" />
+    <link rel="stylesheet" href="/css/inlineLinkUpdates.css" />
 </head>
+
 <body>
-<p th:text="'Hello, ' + ${name} + '!'" />
-<p th:text="'test = ' + ${test} + '!'"  />
-meoadglakjsdg
+<h1 data-text="Inline Link Updates" class="dashed-shadow">Inline Link Updates</h1>
+
+<div id="contents">
+<ul>
+    <li><a href="#search">Search Inline Links</a></li>
+    <li><a href="#add">Add an Inline Link</a></li>
+</ul>
+
+
+<div id="search">
+    <h2 class="search">Search for Inline Links</h2>
+    <form action="#" th:action="@{/inlineLinkUpdates/search}" th:object="${page}" method="post">
+        <div class="site">
+            <label th:for="${#ids.next('searchCriteria.site')}">Site:</label>
+            <select th:field="*{searchCriteria.site}" class="ui-corner-all">
+                <option th:each="site : ${distinctSites}"
+                        th:value="${site}"
+                        th:text="${site}"></option>
+            </select>
+        </div>
+
+        <div class="topicId">
+            <label th:for="${#ids.next('searchCriteria.topicId')}">Topic ID:</label>
+            <input th:field="*{searchCriteria.topicId}" class="ui-corner-all"/>
+        </div>
+
+        <div class="topicName">
+            <label th:for="${#ids.next('searchCriteria.topicName')}">Topic Name:</label>
+            <input th:field="*{searchCriteria.topicName}" class="ui-corner-all" />
+        </div>
+
+        <div class="topicUrl">
+            <label th:for="${#ids.next('searchCriteria.topicUrl')}">Topic URL:</label>
+            <input th:field="*{searchCriteria.topicUrl}" class="ui-corner-all" />
+        </div>
+
+        <div class="buttons">
+            <input type="button" value="Clear All" class="clearAll ui-corner-all" role="button" />
+            <input type="submit" value="Search" class="ui-corner-all" role="button" />
+        </div>
+
+        <div id="results" th:unless="${#lists.isEmpty(results)}">
+
+            <h2 class="searchResults">Results</h2>
+            <header>
+                <div class="resultsPerPage">
+                    <label th:for="${#ids.next('pagination.numberPerPage')}">Results per page:</label>
+                    <select th:field="*{pagination.numberPerPage}" class="ui-corner-all">
+                        <option th:each="choice : ${numberPerPageChoices}"
+                                th:value="${choice.value}"
+                                th:text="${choice.text}"></option>
+                    </select>
+                </div>
+                <div class="showing">
+                    Showing <span th:text="${{page.pagination.startRow}}"></span>
+                    -
+                    <span th:text="${{page.pagination.endRow}}"></span>
+                    of
+                    <span th:text="${{page.pagination.totalResults}}"></span>
+                </div>
+                <div class="pagination">
+                </div>
+            </header>
+
+            <table cellpadding="0" cellspacing="0" border="0" class="ui-corner-all">
+                <tr>
+                    <th class="topicId">Topic ID</th>
+                    <th class="topicName">Topic Name</th>
+                    <th class="topicUrl">Topic URL</th>
+                    <th class="priority">Priority</th>
+                    <th class="actions">Actions</th>
+                </tr>
+                <tr th:each="result : ${results}">
+                    <td class="topicId" th:text="${{result.topicId}}"></td>
+                    <td class="topicName" th:text="${{result.topicName}}"></td>
+                    <td class="topicUrl"><span th:text="${{result.topicUrl}}"></span></td>
+                    <td class="priority" th:text="${{result.priority}}"></td>
+                    <td class="actions"><a href="#" class="ui-button ui-corner-all" role="button">Edit</a> <a href="#" class="ui-button ui-corner-all" role="button">Delete</a></td>
+                </tr>
+            </table>
+
+            <footer>
+                <div class="resultsPerPage">
+                    <label th:for="${#ids.next('pagination.numberPerPage')}">Results per page:</label>
+                    <select th:field="*{pagination.numberPerPage}" class="ui-corner-all">
+                        <option th:each="choice : ${numberPerPageChoices}"
+                                th:value="${choice.value}"
+                                th:text="${choice.text}"></option>
+                    </select>
+                </div>
+                <div class="showing">
+                    Showing <span th:text="${{page.pagination.startRow}}"></span>
+                    -
+                    <span th:text="${{page.pagination.endRow}}"></span>
+                    of
+                    <span th:text="${{page.pagination.totalResults}}"></span>
+                </div>
+                <div class="pagination">
+                </div>
+            </footer>
+        </div>
+
+    </form>
+
+
+</div>
+
+
+
+
+
+
+<!-- ADD -->
+<div id="add">
+    <h2 class="add">Add an Inline Link</h2>
+    <form>
+
+        <div class="topicName">
+            <label for="addTopicName">Topic Name:</label>
+            <input id="addTopicName"  class="ui-corner-all"/>
+        </div>
+
+        <div class="topicUrl">
+            <label for="addTopicUrl">Topic URL:</label>
+            <input id="addTopicUrl"  class="ui-corner-all"/>
+        </div>
+
+        <div class="priority">
+            <label for="addPriority">Priority:</label>
+            <input id="addPriority"  class="ui-corner-all"/>
+        </div>
+
+        <div class="site">
+            <label for="addSite">Site:</label>
+
+            <select name="site" id="addSite" class="ui-corner-all">
+                <option value="parents">Parents</option>
+                <option value="bhg">BHG</option>
+                <option value="recipecom">Recipe</option>
+            </select>
+        </div>
+
+        <div class="contentId">
+            <label for="addContentId">Content ID:</label>
+            <input id="addContentId" class="ui-corner-all"/>
+        </div>
+
+        <div class="buttons">
+            <input type="button" value="Clear All" class="clearAll ui-corner-all" role="button" />
+            <input type="submit" value="Submit" class="ui-corner-all" role="button" />
+        </div>
+
+    </form>
+
+</div>
+</div><!--/content-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<script src="/js/jquery.simplePagination.js"></script>
+<script th:inline="javascript" type="text/javascript">
+    // <![CDATA[
+    $( function() {
+        var totalResults = /*[[${page.pagination.totalResults}]]*/ 4000;
+        var currentPage = /*[[${page.pagination.currentPage}]]*/ 1;
+        var itemsOnPage = /*[[${page.pagination.numberPerPage}]]*/ 25;
+        console.log(totalResults);
+        $(".pagination").pagination({
+            currentPage: currentPage,
+            items: totalResults,
+            itemsOnPage: itemsOnPage,
+            displayedPages: 3,
+            prevText: "< Prev",
+            nextText: "Next >",
+            hrefTextPrefix: "/inlineLinkUpdates/search/page/"
+        });
+
+        $( "#contents" ).tabs();
+    });
+    // ]]>
+</script>
+
+
+
+<script src="http://10.196.100.94:3000/socket.io/socket.io.js"></script>
+<script src="http://10.196.100.94:3001/browser-sync-client.min.js"></script>
+
 </body>
 </html>

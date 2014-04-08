@@ -1,0 +1,11 @@
+{
+    "name": "inlineLinkUpdates",
+    "version": "1.0.0",
+    "ignore": [
+        "node_modules",
+        "bower_components"
+    ],
+    "dependencies": {
+        "simplePagination": "https://github.com/flaviusmatis/simplePagination.git#573f0ad26b89d3851a1f19f00b0bc8750130fa2a"
+    }
+}

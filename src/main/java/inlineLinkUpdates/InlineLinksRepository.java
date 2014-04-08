@@ -1,16 +1,153 @@
 package inlineLinkUpdates;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class InlineLinksRepository {
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public int test() {
-        return jdbcTemplate.queryForInt("select 1 from dual");
+    public List<String> getDistinctSites() {
+        String sql = "select distinct site from mdp_topic order by site desc";
+
+        return jdbcTemplate.queryForList(sql, String.class);
     }
+
+    public void addInlineLink(InlineLink inlineLink) {
+        String sql = "insert into mdp_topic(topic_id, topic_name, topic_url, priority, topic_type_id, num_words_in_topic, site) values (?, ?, ?, ?, ?, ?, ?)";
+
+        jdbcTemplate.update(sql, new Object[] {
+                inlineLink.getTopicId()
+                ,inlineLink.getTopicName()
+                ,inlineLink.getTopicUrl()
+                ,inlineLink.getPriority()
+                ,inlineLink.getTopicTypeId()
+                ,inlineLink.getNumWordsInTopic()
+                ,inlineLink.getSite()
+        });
+    }
+
+    public void deleteInlineLink(String topicId) {
+        String sql = "delete from mdp_topic where topic_id = ?";
+
+        jdbcTemplate.update(sql, new Object[] {topicId});
+    }
+
+    public List<InlineLink> searchInlineLinks(Map<String, String> parameters) {
+        return searchInlineLinks(parameters, null, null);
+    }
+
+    public List<InlineLink> searchInlineLinks(Map<String, String> parameters, String orderBy) {
+        return searchInlineLinks(parameters, orderBy, null);
+    }
+
+    public List<InlineLink> searchInlineLinks(Map<String, String> parameters, Pagination pagination) {
+        return searchInlineLinks(parameters, null, pagination);
+    }
+
+    public List<InlineLink> searchInlineLinks(Map<String, String> parameters, String orderBy, Pagination pagination) {
+        String sql = buildSql("select * from mdp_topic", parameters, orderBy);
+
+        // values for search
+        Object[] values = new Object[parameters.size()];
+        int i = 0;
+        for(Map.Entry<String, String> entry : parameters.entrySet()) {
+            values[i] = entry.getValue();
+            i++;
+        }
+
+        List<InlineLink> results = new ArrayList<InlineLink>();
+
+        // pagination total results
+        if(pagination != null) {
+            if(pagination.getTotalResults() == 0) {
+                String countSql = buildSql("select count(topic_id) from mdp_topic", parameters, orderBy);
+                int totalResults = jdbcTemplate.queryForObject(countSql, values, Integer.class);
+                pagination.setTotalResults(totalResults);
+            }
+
+            // add pagination on query
+            sql = buildPaginationSql(sql, pagination);
+
+            results = jdbcTemplate.query(
+                    sql
+                    ,values
+                    ,new InlineLinkPaginationRowMapper()
+            );
+
+        } else {
+            results = jdbcTemplate.query(
+                    sql
+                    ,values
+                    ,new InlineLinkRowMapper()
+                );
+        }
+
+        return results;
+    }
+
+    public class InlineLinkRowMapper implements RowMapper<InlineLink> {
+        @Override
+        public InlineLink mapRow(ResultSet rs, int rowNum) throws SQLException {
+            InlineLink inlineLink = new InlineLink();
+            inlineLink.setTopicId(rs.getString("topic_id"));
+            inlineLink.setTopicName(rs.getString("topic_name"));
+            inlineLink.setTopicUrl(rs.getString("topic_url"));
+            inlineLink.setPriority(rs.getInt("priority"));
+            inlineLink.setTopicTypeId(rs.getInt("topic_type_id"));
+            inlineLink.setNumWordsInTopic(rs.getInt("num_words_in_topic"));
+            inlineLink.setSite(rs.getString("site"));
+            return inlineLink;
+        }
+    }
+
+    public class InlineLinkPaginationRowMapper extends InlineLinkRowMapper {
+        @Override
+        public InlineLink mapRow(ResultSet rs, int rowNum) throws SQLException {
+            InlineLink inlineLink = super.mapRow(rs, rowNum);
+            inlineLink.setRowNumber(rs.getInt("rnum"));
+            return inlineLink;
+        }
+    }
+
+
+    public static String buildSql(String sqlSelect, Map<String, String> parameters, String orderBy) {
+        String sql = sqlSelect;
+        if(!parameters.isEmpty()) {
+            List<String> whereClauses = new ArrayList<>();
+            for(String key : parameters.keySet()) {
+                whereClauses.add(String.format("%s = ?", key));
+            }
+            sql += " where " + StringUtils.join(whereClauses, " and ");
+        }
+        if(StringUtils.isBlank(orderBy)) {
+            sql += " order by topic_name asc";
+        } else {
+            sql += " order by " + orderBy;
+        }
+        return sql;
+    }
+
+    public static String buildPaginationSql(String sql, Pagination pagination) {
+        String paginationSql = String.format("SELECT * FROM ( SELECT rownum rnum, a.* from ( %s ) a ) WHERE rnum BETWEEN %s AND %s",
+                sql
+                ,pagination.getStartRow()
+                ,pagination.getEndRow()
+        );
+
+        return paginationSql;
+    }
+
 }
 

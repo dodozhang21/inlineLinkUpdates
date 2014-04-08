@@ -1,0 +1,104 @@
+'use strict';
+
+module.exports = function(grunt) {
+
+    // Project configuration.
+    grunt.initConfig({
+
+        // Metadata.
+        pkg: grunt.file.readJSON('package.json'),
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+
+        // Task configuration.
+        clean: {
+            options: {
+                force: true
+            },
+            files: ['css/']
+        },
+        compass: {
+            dist: {
+                options: {
+                    //config: 'config.rb'
+                    sassDir: 'sass',
+                    cssDir: 'css',
+                    specify: 'sass/*.scss',
+                    outputStyle: 'compact'
+                }
+            }
+        },
+        bower: {
+            install: {
+                options: {
+                    cleanup: true,
+                    targetDir: 'js/libs'
+                }
+            }
+        },
+        cssmin: {
+            options: {
+                banner: '/* DO NOT COMMIT */',
+                report: false /* change to 'gzip' to see gzipped sizes on local */
+            },
+            minify: {
+                expand: true,
+                cwd: 'css/',
+                src: ['**/*.css', '!*.min.css'],
+                dest: '../css/',
+                rename:function(dest, src) { /* Using this instead of ext to support files containing more than one dot. https://github.com/gruntjs/grunt/pull/750 */
+                    return dest + src;
+                }
+                /*ext: '.css'*/
+            }
+        },
+        uglify: {
+            options: {
+                banner: '<%= banner %>',
+                report: false /* change to 'gzip' to see gzipped sizes on local */
+            },
+            minify:{
+                expand: true,
+                src: ['js/**/*.js'],
+                dest: 'js/',
+                rename:function(dest, src) { /* Using this instead of ext to support files containing more than one dot. https://github.com/gruntjs/grunt/pull/750 */
+                    return dest + src;
+                }
+                /*ext: '.js'*/
+            }
+        },
+        watch: {
+          sassy: {
+            files: ['sass/**/*.scss'],
+            tasks: ['compass'],
+            options: {
+                spawn: false,
+                livereload: false
+            }
+          }
+        }
+        ,
+        browser_sync: {
+            files: {
+                src : ['css/**/*.css']
+            },
+            options: {
+                watchTask: true
+            }
+        }
+    });
+
+    // These plugins provide necessary tasks.
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-compass');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-browser-sync');
+    grunt.loadNpmTasks('grunt-bower-task');
+
+    // Default task.
+    grunt.registerTask('local', ['clean', 'compass', 'browser_sync', 'watch']);
+    grunt.registerTask('default', ['clean', 'compass', 'uglify', 'cssmin']);
+
+
+};
