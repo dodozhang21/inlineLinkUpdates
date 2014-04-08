@@ -74,6 +74,10 @@ h1, h2 {
   font-family: 'Cookie';
   font-size:5em;
   margin: 0 0 .2em 0;
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
 }
 
 h2 {
@@ -282,4 +286,32 @@ form {
     }
   }
 
+}
+
+
+#add {
+  ul.errors {
+    margin: 0 0 0 9em;
+    list-style: square;
+    color: red;
+  }
+  form {
+    div {
+      &:first-child {
+        margin-top: .5em;
+      }
+      float: none;
+      width: auto;
+      margin: .8em 0;
+      &.buttons {
+        margin-left: 10em;
+      }
+    }
+  }
+}
+
+// jQuery ui reset
+.ui-dialog-titlebar,
+.ui-dialog-buttonset {
+  font-size: .8em;
 }

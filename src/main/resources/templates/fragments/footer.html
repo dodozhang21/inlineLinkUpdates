@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+
+<body>
+    <div th:fragment="footer">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+        <script src="/js/jquery.simplePagination.js"></script>
+        <script src="/js/inlineLinkUpdates.js"></script>
+    </div>
+
+    <div th:fragment="pagination(totalResults, currentPage, itemsOnPage)">
+        <script th:inline="javascript" type="text/javascript">
+            // <![CDATA[
+            $( function() {
+                var totalResults = /*[[${totalResults}]]*/ 4000;
+                var currentPage = /*[[${currentPage}]]*/ 1;
+                var itemsOnPage = /*[[${itemsOnPage}]]*/ 25;
+                $(".pagination").pagination({
+                    currentPage: currentPage,
+                    items: totalResults,
+                    itemsOnPage: itemsOnPage,
+                    displayedPages: 3,
+                    prevText: "< Prev",
+                    nextText: "Next >",
+                    hrefTextPrefix: "/inlineLinkUpdates/search/page/"
+                });
+            });
+            // ]]>
+        </script>
+    </div>
+
+    <div th:fragment="tabs(isAdd)">
+        <script th:inline="javascript" type="text/javascript">
+            // <![CDATA[
+            $( function() {
+                var isAdd = /*[[${isAdd}]]*/ false;
+
+                var active = isAdd ? 1 : 0;
+
+                $( "#contents" ).tabs({active: active});
+            });
+            // ]]>
+        </script>
+    </div>
+
+
+</body>
+</html>

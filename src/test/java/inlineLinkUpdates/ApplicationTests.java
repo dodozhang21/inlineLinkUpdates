@@ -49,6 +49,13 @@ public class ApplicationTests {
         assertTrue(newResults.isEmpty());
     }
 
+/* // commenting out this test so I don't burn sequence
+    @Test
+    public void testGetNextInlineLinkTopicId() {
+        System.out.println(inlineLinksRepository.getNextInlineLinkTopicId());
+    }
+*/
+
 	@Test
 	public void testBuildSql_defaultOrderBy() {
         Map<String, String> parameters = new HashMap<String, String>() {
@@ -60,7 +67,7 @@ public class ApplicationTests {
 
         String sql = inlineLinksRepository.buildSql("select * from mdp_topic", parameters, null);
 
-        assertEquals("select * from mdp_topic where topic_name = ? and topic_id = ? order by topic_name asc", sql);
+        assertEquals("select * from mdp_topic where upper(topic_name) = upper(?) and upper(topic_id) = upper(?) order by topic_name asc", sql);
 	}
 
     @Test
@@ -74,7 +81,7 @@ public class ApplicationTests {
 
         String sql = inlineLinksRepository.buildSql("select * from mdp_topic", parameters, "topic_id desc, topic_name asc");
 
-        assertEquals("select * from mdp_topic where topic_name = ? and topic_id = ? order by topic_id desc, topic_name asc", sql);
+        assertEquals("select * from mdp_topic where upper(topic_name) = upper(?) and upper(topic_id) = upper(?) order by topic_id desc, topic_name asc", sql);
     }
 
     @Test
