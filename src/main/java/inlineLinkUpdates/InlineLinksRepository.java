@@ -43,8 +43,11 @@ public class InlineLinksRepository {
     }
 
     public void deleteInlineLink(String topicId) {
+        // delete from join table
+        String joinSql = "delete from mdp_content_topic where topic_id = ?";
         String sql = "delete from mdp_topic where topic_id = ?";
 
+        jdbcTemplate.update(joinSql, new Object[] {topicId});
         jdbcTemplate.update(sql, new Object[] {topicId});
     }
 
@@ -131,7 +134,7 @@ public class InlineLinksRepository {
         if(!parameters.isEmpty()) {
             List<String> whereClauses = new ArrayList<>();
             for(String key : parameters.keySet()) {
-                whereClauses.add(String.format("%s = ?", key));
+                whereClauses.add(String.format("upper(%s) = upper(?)", key));
             }
             sql += " where " + StringUtils.join(whereClauses, " and ");
         }

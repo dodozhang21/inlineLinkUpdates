@@ -51,6 +51,11 @@ public class InlineLinksController {
         return new InlineLink();
     }
 
+    @ModelAttribute("editInlineLink")
+    public InlineLink editInlineLink() {
+        return new InlineLink();
+    }
+
     @ModelAttribute("sitesForNewInlineLink")
     public List<SelectOption> sitesForNewInlineLink() {
         return Arrays.asList(
@@ -99,6 +104,25 @@ public class InlineLinksController {
         inlineLinksService.addInlineLink(newInlineLink);
 
         return "inlineLinks";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/delete/{topicId}")
+    public String delete(@PathVariable String topicId
+            , @ModelAttribute("page") InlineLinkUpdatesPage page
+            , final Model model) {
+
+        inlineLinksService.deleteInlineLink(topicId);
+        List<InlineLink> results = inlineLinksService.searchInlineLinks(page.getSearchCriteria(), null, page.getPagination());
+        model.addAttribute("results", results);
+
+        return "inlineLinks";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/edit/{topicId}")
+    public String edit(@PathVariable String topicId
+            , final Model model) {
+
+        return "editInlineLink";
     }
 
 }

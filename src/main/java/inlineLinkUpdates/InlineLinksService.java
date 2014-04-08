@@ -3,6 +3,7 @@ package inlineLinkUpdates;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +29,7 @@ public class InlineLinksService {
         inlineLinksRepository.addInlineLink(inlineLink);
     }
 
+    @Transactional
     public void deleteInlineLink(String topicId) {
         inlineLinksRepository.deleteInlineLink(topicId);
     }
