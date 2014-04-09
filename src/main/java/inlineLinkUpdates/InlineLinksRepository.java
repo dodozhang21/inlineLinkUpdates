@@ -78,11 +78,9 @@ public class InlineLinksRepository {
 
         // pagination total results
         if(pagination != null) {
-            if(pagination.getTotalResults() == 0) {
-                String countSql = buildSql("select count(topic_id) from mdp_topic", parameters, orderBy);
-                int totalResults = jdbcTemplate.queryForObject(countSql, values, Integer.class);
-                pagination.setTotalResults(totalResults);
-            }
+            String countSql = buildSql("select count(topic_id) from mdp_topic", parameters, orderBy);
+            int totalResults = jdbcTemplate.queryForObject(countSql, values, Integer.class);
+            pagination.setTotalResults(totalResults);
 
             // add pagination on query
             sql = buildPaginationSql(sql, pagination);

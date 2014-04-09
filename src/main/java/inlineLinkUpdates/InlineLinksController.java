@@ -1,9 +1,11 @@
 package inlineLinkUpdates;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -76,8 +78,10 @@ public class InlineLinksController {
     public String search(@ModelAttribute("page") InlineLinkUpdatesPage page
             , final Model model) {
 
+        page.getPagination().setCurrentPage(1);
         List<InlineLink> results = inlineLinksService.searchInlineLinks(page.getSearchCriteria(), null, page.getPagination());
         model.addAttribute("results", results);
+        model.addAttribute("page", page);
 
         return "inlineLinks";
     }
@@ -102,7 +106,20 @@ public class InlineLinksController {
             return "inlineLinks";
         }
 
-        inlineLinksService.addInlineLink(newInlineLink);
+        try {
+            inlineLinksService.addInlineLink(newInlineLink);
+        } catch(DuplicateKeyException e) {
+            result.addError(new ObjectError("topicId",
+                String.format(
+                        "Inline link already exists for topic name '%s', topic url '%s', site '%s'."
+                        ,newInlineLink.getTopicName()
+                        ,newInlineLink.getTopicUrl()
+                        ,newInlineLink.getSite()
+                    )
+                )
+            );
+            model.addAttribute("isAdd", true);
+        }
 
         return "inlineLinks";
     }

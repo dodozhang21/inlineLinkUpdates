@@ -13,7 +13,6 @@
         <li><a href="#add">Add an Inline Link</a></li>
     </ul>
 
-
     <div id="search">
         <h2 class="search">Search for Inline Links</h2>
         <form action="#" th:action="@{/inlineLinkUpdates/search}" th:object="${page}" method="post">
@@ -177,25 +176,9 @@
 </div>
 
 <div th:replace="fragments/footer :: footer"></div>
-
-<script th:inline="javascript" type="text/javascript">
-    // <![CDATA[
-    $( function() {
-        var totalResults = /*[[${page.pagination.totalResults}]]*/ 4000;
-        var currentPage = /*[[${page.pagination.currentPage}]]*/ 1;
-        var itemsOnPage = /*[[${page.pagination.numberPerPage}]]*/ 25;
-        $(".pagination").pagination({
-            currentPage: currentPage,
-            items: totalResults,
-            itemsOnPage: itemsOnPage,
-            displayedPages: 3,
-            prevText: "< Prev",
-            nextText: "Next >",
-            hrefTextPrefix: "/inlineLinkUpdates/search/page/"
-        });
-    });
-    // ]]>
-</script>
+<div th:replace="fragments/footer :: pagination(${page.pagination.totalResults}
+                                        , ${page.pagination.currentPage}
+                                        , ${page.pagination.numberPerPage})"></div>
 
 <script th:inline="javascript" type="text/javascript">
     // <![CDATA[
@@ -208,7 +191,6 @@
     });
     // ]]>
 </script>
-
 
 <script src="http://10.196.100.94:3000/socket.io/socket.io.js"></script>
 <script src="http://10.196.100.94:3001/browser-sync-client.min.js"></script>
