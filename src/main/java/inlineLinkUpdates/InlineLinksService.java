@@ -65,4 +65,12 @@ public class InlineLinksService {
     public List<String> getDistinctSites() {
         return inlineLinksRepository.getDistinctSites();
     }
+
+    public InlineLink findInlineLinkByTopicId(String topicId) {
+        return inlineLinksRepository.findInlineLinkByTopicId(topicId);
+    }
+
+    public void updateInlineLink(InlineLink inlineLink) {
+        inlineLinksRepository.updateInlineLink(inlineLink);
+    }
 }

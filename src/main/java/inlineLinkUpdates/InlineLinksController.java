@@ -6,13 +6,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 
 @Controller
 @RequestMapping("/inlineLinkUpdates")
-@SessionAttributes(value = {"distinctSites", "page"})
+@SessionAttributes(value = {"distinctSites", "page", "editInlineLink"})
 public class InlineLinksController {
     @Autowired
     private InlineLinksService inlineLinksService;
@@ -119,9 +120,29 @@ public class InlineLinksController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/edit/{topicId}")
-    public String edit(@PathVariable String topicId
+    public String editLoad(@PathVariable String topicId
+            , @ModelAttribute("editInlineLink") InlineLink editInlineLink
             , final Model model) {
 
+        editInlineLink = inlineLinksService.findInlineLinkByTopicId(topicId);
+        model.addAttribute("editInlineLink", editInlineLink);
+
+        return "editInlineLink";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/edit")
+    public String edit(@Valid @ModelAttribute("editInlineLink") InlineLink editInlineLink
+            ,final BindingResult result
+            ,final Model model
+            ,HttpServletResponse response) {
+
+        if(result.hasErrors()) {
+            response.setStatus(418); //http://en.wikipedia.org/wiki/List_of_HTTP_status_codes#4xx_Client_Error april fools's joke
+            return "editInlineLink";
+        }
+
+        response.setHeader("topicId", editInlineLink.getTopicId());
+        inlineLinksService.updateInlineLink(editInlineLink);
         return "editInlineLink";
     }
 

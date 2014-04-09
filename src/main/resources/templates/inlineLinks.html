@@ -17,6 +17,7 @@
     <div id="search">
         <h2 class="search">Search for Inline Links</h2>
         <form action="#" th:action="@{/inlineLinkUpdates/search}" th:object="${page}" method="post">
+            <input th:field="*{pagination.currentPage}" id="currentPage" type="hidden"/>
             <div class="site">
                 <label th:for="${#ids.next('searchCriteria.site')}">Site:</label>
                 <select th:field="*{searchCriteria.site}" class="ui-corner-all">
@@ -53,7 +54,7 @@
                 <header>
                     <div class="resultsPerPage">
                         <label th:for="${#ids.next('pagination.numberPerPage')}">Results per page:</label>
-                        <select th:field="*{pagination.numberPerPage}" class="ui-corner-all">
+                        <select th:field="*{pagination.numberPerPage}" class="resultsPerPage ui-corner-all">
                             <option th:each="choice : ${numberPerPageChoices}"
                                     th:value="${choice.value}"
                                     th:text="${choice.text}"></option>
@@ -78,15 +79,17 @@
                         <th class="priority">Priority</th>
                         <th class="actions">Actions</th>
                     </tr>
-                    <tr th:each="result : ${results}">
+                    <tr th:each="result : ${results}" th:id="${result.topicId}">
                         <td class="topicId" th:text="${{result.topicId}}"></td>
                         <td class="topicName" th:text="${{result.topicName}}"></td>
                         <td class="topicUrl"><span th:text="${{result.topicUrl}}"></span></td>
                         <td class="priority" th:text="${{result.priority}}"></td>
                         <td class="actions">
-                            <a href="#" class="ui-button ui-corner-all" role="button">Edit</a>
+                            <a th:href="'/inlineLinkUpdates/edit/' + ${result.topicId}"
+                               class="ui-button ui-corner-all editInlineLink"
+                               role="button">Edit</a>
                             <a th:href="'/inlineLinkUpdates/delete/' + ${result.topicId}"
-                               th:data-topicName="${result.topicName}"
+                               th:attr="data-topicName=${result.topicName}"
                                class="ui-button ui-corner-all deleteInlineLink"
                                role="button">Delete</a>
                         </td>
@@ -96,7 +99,7 @@
                 <footer>
                     <div class="resultsPerPage">
                         <label th:for="${#ids.next('pagination.numberPerPage')}">Results per page:</label>
-                        <select th:field="*{pagination.numberPerPage}" class="ui-corner-all">
+                        <select th:field="*{pagination.numberPerPage}" class="resultsPerPage ui-corner-all">
                             <option th:each="choice : ${numberPerPageChoices}"
                                     th:value="${choice.value}"
                                     th:text="${choice.text}"></option>
@@ -166,16 +169,45 @@
     </div>
 </div><!--/content-->
 
-<div id="deleteConfirmation" title="Delete Confirmation" class="hide">
-    <p>Are you sure you wish to delete the inline link with topic name '<span id="deleteTopicName"></span>'?</p>
+<div id="deleteConfirmationDialog" title="Delete Confirmation" class="hide">
+    <p>Are you sure you wish to delete the inline link with topic name <b id="deleteTopicName"></b>?</p>
 </div>
 
+<div id="editInlineLinkDialog" title="Edit Inline Link" class="hide">
+</div>
 
 <div th:replace="fragments/footer :: footer"></div>
-<div th:replace="fragments/footer :: pagination(totalResults=${page.pagination.totalResults}
-                                                            , currentPage=${page.pagination.currentPage}
-                                                            , itemsOnPage=${page.pagination.numberPerPage})"></div>
-<div th:replace="fragments/footer :: tabs(${isAdd})"></div>
+
+<script th:inline="javascript" type="text/javascript">
+    // <![CDATA[
+    $( function() {
+        var totalResults = /*[[${page.pagination.totalResults}]]*/ 4000;
+        var currentPage = /*[[${page.pagination.currentPage}]]*/ 1;
+        var itemsOnPage = /*[[${page.pagination.numberPerPage}]]*/ 25;
+        $(".pagination").pagination({
+            currentPage: currentPage,
+            items: totalResults,
+            itemsOnPage: itemsOnPage,
+            displayedPages: 3,
+            prevText: "< Prev",
+            nextText: "Next >",
+            hrefTextPrefix: "/inlineLinkUpdates/search/page/"
+        });
+    });
+    // ]]>
+</script>
+
+<script th:inline="javascript" type="text/javascript">
+    // <![CDATA[
+    $( function() {
+        var isAdd = /*[[${isAdd}]]*/ false;
+
+        var active = isAdd ? 1 : 0;
+
+        $( "#contents" ).tabs({active: active});
+    });
+    // ]]>
+</script>
 
 
 <script src="http://10.196.100.94:3000/socket.io/socket.io.js"></script>

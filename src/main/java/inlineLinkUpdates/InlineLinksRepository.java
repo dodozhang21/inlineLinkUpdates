@@ -104,6 +104,31 @@ public class InlineLinksRepository {
         return results;
     }
 
+    public InlineLink findInlineLinkByTopicId(String topicId) {
+        String sql = "select * from mdp_topic where topic_id = ?";
+
+        List<InlineLink> results = jdbcTemplate.query(sql
+                                    , new Object[] {
+                                        topicId
+                                    }
+                                    , new InlineLinkRowMapper()
+                                    );
+        return results.isEmpty() ? null : results.get(0);
+    }
+
+    public void updateInlineLink(InlineLink inlineLink) {
+
+        String sql = "update mdp_topic set topic_name = ?, topic_url = ?, priority = ?, num_words_in_topic = ? where topic_id = ?";
+
+        jdbcTemplate.update(sql, new Object[] {
+                inlineLink.getTopicName(),
+                inlineLink.getTopicUrl(),
+                inlineLink.getPriority(),
+                inlineLink.getNumWordsInTopic(),
+                inlineLink.getTopicId()
+                });
+    }
+
     public class InlineLinkRowMapper implements RowMapper<InlineLink> {
         @Override
         public InlineLink mapRow(ResultSet rs, int rowNum) throws SQLException {

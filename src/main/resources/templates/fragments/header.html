@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:fragment="header">
-        <title th:text="${title} ? ${title} : 'Inline Link Updates'"></title>
+        <title th:text="${#strings.isEmpty(title)} ? 'Inline Link Updates' : ${title}"></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="/css/inlineLinkUpdates.css" />
     </head>

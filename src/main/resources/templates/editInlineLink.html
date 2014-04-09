@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: header(title='Edit Inline Link')"></head>
+<!--<head th:replace="fragments/header :: header(title='Edit Inline Link')"></head>-->
 
 <form action="#" th:action="@{/inlineLinkUpdates/edit}" th:object="${editInlineLink}" method="post">
 
@@ -10,7 +10,7 @@
 
     <div class="site">
         <label th:for="${#ids.next('site')}">Site:</label>
-        <select th:field="*{site}" class="ui-corner-all">
+        <select th:id="${#ids.next('site')}" th:field="*{site}" class="ui-corner-all">
             <option th:each="site : ${sitesForNewInlineLink}"
                     th:value="${site.value}"
                     th:text="${site.text}"></option>
@@ -19,23 +19,23 @@
 
     <div class="topicName">
         <label th:for="${#ids.next('topicName')}">Topic Name:</label>
-        <input th:field="*{topicName}" class="ui-corner-all" type="text" />
+        <input th:id="${#ids.next('topicName')}" th:field="*{topicName}" class="ui-corner-all" type="text" />
     </div>
 
     <div class="topicUrl">
         <label th:for="${#ids.next('topicUrl')}">Topic URL:</label>
-        <input th:field="*{topicUrl}" class="ui-corner-all" type="text" />
+        <input th:id="${#ids.next('topicUrl')}" th:field="*{topicUrl}" class="ui-corner-all" type="text" />
     </div>
 
     <div class="priority">
         <label th:for="${#ids.next('priority')}">Priority:</label>
-        <input th:field="*{priority}" class="ui-corner-all" type="text" />
+        <input th:id="${#ids.next('priority')}" th:field="*{priority}" class="ui-corner-all" type="text" />
     </div>
 
-    <div class="buttons">
-        <input type="button" value="Clear All" class="clearAll ui-corner-all" role="button" />
-        <input type="submit" value="Submit" class="ui-corner-all" role="button" />
-    </div>
+    <!--<div class="buttons">-->
+        <!--<input type="button" value="Clear All" class="clearAll ui-corner-all" role="button" />-->
+        <!--<input type="submit" value="Submit" class="ui-corner-all" role="button" />-->
+    <!--</div>-->
 
 </form>
 </html>

@@ -3,7 +3,6 @@
 
 @import "partials/init";
 
-
 //Variables here:
 //(alongside with commented suggestions)
 $green: #7eb644;
@@ -226,9 +225,8 @@ form {
     margin: 1em 0;
     border: 1px solid $darker-blue;
     tr {
-
       th, td {
-        font-size: .85em;
+        font-size: .9em;
         &:first-child {
           padding-left: 1em;
         }
@@ -272,12 +270,13 @@ form {
       padding: .5em;
     }
     td.topicUrl {
-      width: 20%;
+      width: 50%;
       span {
         word-wrap: break-word;
       }
     }
     .actions {
+      white-space: nowrap;
       a {
         padding: .3em .5em;
         font-size: .9em;
@@ -289,12 +288,13 @@ form {
 }
 
 
+ul.errors {
+  margin: 0 0 0 9em;
+  list-style: square;
+  color: red;
+}
+
 #add {
-  ul.errors {
-    margin: 0 0 0 9em;
-    list-style: square;
-    color: red;
-  }
   form {
     div {
       &:first-child {
@@ -312,6 +312,23 @@ form {
 
 // jQuery ui reset
 .ui-dialog-titlebar,
-.ui-dialog-buttonset {
+.ui-dialog-buttonset,
+.ui-dialog .ui-dialog-content {
   font-size: .8em;
+  form {
+    ul.errors {
+      margin-left: 18%;
+    }
+    div {
+      float: none;
+      width: auto;
+      margin: .8em 0;
+      label {
+        width: 20%;
+      }
+      #topicUrl1, #topicName1 {
+        width: 75%;
+      }
+    }
+  }
 }
