@@ -76,6 +76,6 @@
     $('.clearAll').on('click', function(e) {
         e.preventDefault();
         var form = $(this).closest("form");
-        $(form).find('input[type="text"], select').val('');
+        $(form).find('input[type="text"], .site select').val('');
     });
 })(jQuery);
