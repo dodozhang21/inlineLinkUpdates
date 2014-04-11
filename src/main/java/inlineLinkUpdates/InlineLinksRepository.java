@@ -167,7 +167,7 @@ public class InlineLinksRepository {
     public static String buildSql(String sqlSelect, Map<String, String> parameters, String orderBy) {
         String sql = sqlSelect;
         if(!parameters.isEmpty()) {
-            List<String> whereClauses = new ArrayList<>();
+            List<String> whereClauses = new ArrayList<String>();
             for(String key : parameters.keySet()) {
                 whereClauses.add(String.format("upper(%s) = upper(?)", key));
             }
