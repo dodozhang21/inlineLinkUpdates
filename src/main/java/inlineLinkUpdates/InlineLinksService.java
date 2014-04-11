@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,5 +73,18 @@ public class InlineLinksService {
 
     public void updateInlineLink(InlineLink inlineLink) {
         inlineLinksRepository.updateInlineLink(inlineLink);
+    }
+
+    public List<AutoCompleteItem> findLikeTerms(String parameter, String value, InlineLink inlineLink) {
+        List<AutoCompleteItem> autoCompleteItems = new ArrayList<AutoCompleteItem>();
+        List<InlineLink> results = inlineLinksRepository.findLikeRows(parameter, value, inlineLink);
+        if(results != null) {
+            for(InlineLink result : results) {
+                String propertyValue = result.getStringProperty(parameter);
+                String id = "i" + propertyValue.replaceAll("\\W", "");
+                autoCompleteItems.add(new AutoCompleteItem(id, propertyValue, propertyValue));
+            }
+        }
+        return autoCompleteItems;
     }
 }

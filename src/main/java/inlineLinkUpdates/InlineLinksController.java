@@ -163,4 +163,24 @@ public class InlineLinksController {
         return "editInlineLink";
     }
 
+
+    @RequestMapping(method = RequestMethod.GET, value = "/like/{parameter}/{searchTerm}")
+
+    @ResponseBody
+    public List<AutoCompleteItem> findLikeInlineLinks(@PathVariable String parameter
+            , @PathVariable String searchTerm
+            , @RequestParam(value="site", required=true) String site
+            , HttpServletResponse response) {
+
+        InlineLink searchCriteria = new InlineLink();
+        searchCriteria.setSite(site);
+        // make sure the parameter is a property on inlinelink
+        if(!InlineLink.hasProperty(parameter)) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return null;
+        }
+
+        return inlineLinksService.findLikeTerms(parameter, searchTerm, searchCriteria);
+    }
+
 }

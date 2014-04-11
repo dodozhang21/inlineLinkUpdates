@@ -114,6 +114,18 @@ public class InlineLinksRepository {
         return results.isEmpty() ? null : results.get(0);
     }
 
+    public List<InlineLink> findLikeRows(String parameter, String value, InlineLink like) {
+        String dbColumn = InlineLink.convertToDbColumn(parameter);
+        String sql = String.format("select * from (select * from mdp_topic where upper(%s) like upper('%%%s%%') and site = ? order by %s) where ROWNUM <= 20"
+                , dbColumn
+                , value
+                , dbColumn);
+        return jdbcTemplate.query(sql, new Object[] {
+                    like.getSite()
+                }
+                , new InlineLinkRowMapper());
+    }
+
     public void updateInlineLink(InlineLink inlineLink) {
 
         String sql = "update mdp_topic set topic_name = ?, topic_url = ?, priority = ?, num_words_in_topic = ? where topic_id = ?";
@@ -127,7 +139,7 @@ public class InlineLinksRepository {
                 });
     }
 
-    public class InlineLinkRowMapper implements RowMapper<InlineLink> {
+    public static class InlineLinkRowMapper implements RowMapper<InlineLink> {
         @Override
         public InlineLink mapRow(ResultSet rs, int rowNum) throws SQLException {
             InlineLink inlineLink = new InlineLink();
@@ -142,7 +154,7 @@ public class InlineLinksRepository {
         }
     }
 
-    public class InlineLinkPaginationRowMapper extends InlineLinkRowMapper {
+    public static class InlineLinkPaginationRowMapper extends InlineLinkRowMapper {
         @Override
         public InlineLink mapRow(ResultSet rs, int rowNum) throws SQLException {
             InlineLink inlineLink = super.mapRow(rs, rowNum);

@@ -8,7 +8,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -30,6 +33,7 @@ public class ApplicationTests {
         inlineLink.setTopicName("test");
 
         inlineLinksRepository.addInlineLink(inlineLink);
+
 
 
         Map<String, String> parameters = new HashMap<String, String>() {
@@ -55,7 +59,6 @@ public class ApplicationTests {
         System.out.println(inlineLinksRepository.getNextInlineLinkTopicId());
     }
 */
-
 	@Test
 	public void testBuildSql_defaultOrderBy() {
         Map<String, String> parameters = new HashMap<String, String>() {
@@ -75,7 +78,18 @@ public class ApplicationTests {
         Map<String, String> parameters = new HashMap<String, String>() {
             {
                 put("topic_id", "rbs1345");
-                put("topic_name", "baby");
+                put("topic_name", "bab" +
+                        "//makes jQuery autocomplete highlight properly\n" +
+                        "//via http://stackoverflow.com/questions/3695184/jquery-autocomplete-highlighting\n" +
+                        "$.ui.autocomplete.prototype._renderItem = function( ul, item){\n" +
+                        "    var term = this.term.split(' ').join('|');\n" +
+                        "    var re = new RegExp(\"(\" + term + \")\", \"gi\") ;\n" +
+                        "    var t = item.label.replace(re,\"<b>$1</b>\");\n" +
+                        "    return $( \"<li></li>\" )\n" +
+                        "        .data( \"item.autocomplete\", item )\n" +
+                        "        .append( \"<a>\" + t + \"</a>\" )\n" +
+                        "        .appendTo( ul );\n" +
+                        "};y");
             }
         };
 
@@ -97,6 +111,14 @@ public class ApplicationTests {
         for(InlineLink inlineLink : results) {
             System.out.println(inlineLink);
         }
+    }
+
+    @Test
+    public void testLikeRows() {
+        InlineLink inlineLink = new InlineLink();
+        inlineLink.setSite("parents");
+        List<InlineLink> results = inlineLinksRepository.findLikeRows("topicId", "par", inlineLink);
+        assertEquals(20, results.size());
     }
 
 }

@@ -1,4 +1,13 @@
 (function($){
+    // auto completes
+    var searchTopicId = $('#search .topicId input');
+    var searchTopicName = $('#search .topicName input');
+    var searchTopicUrl = $('#search .topicUrl input');
+    var topicIdCache = {}, topicNameCache = {}, topicUrlCache = {};
+    autoComplete(searchTopicId, "topicId", topicIdCache);
+    autoComplete(searchTopicName, "topicName", topicNameCache);
+    autoComplete(searchTopicUrl, "topicUrl", topicUrlCache);
+
     // dialogs
     var editInlineLinkDialogDiv = $('#editInlineLinkDialog');
     var editInlineLinkDialog = $(editInlineLinkDialogDiv).dialog({
@@ -60,7 +69,6 @@
         });
     });
 
-
     $('a.deleteInlineLink').on('click', function(e) {
         e.preventDefault();
         $('#deleteTopicName').html($(this).data('topicname'));
@@ -78,4 +86,29 @@
         var form = $(this).closest("form");
         $(form).find('input[type="text"], .site select').val('');
     });
+
+    function autoComplete(field, parameter, cache) {
+        $(field).autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                var term = request.term;
+                if ( term in cache ) {
+                    response( cache[ term ] );
+                    return;
+                }
+
+                var selectedSite = $(field).closest('form').find('.site select').val();
+                console.log('selectedSite = ' + selectedSite);
+
+                $.getJSON( "/inlineLinkUpdates/like/" + parameter + '/' + term
+                    ,{'site': selectedSite }
+                    ,
+                    function( data, status, xhr ) {
+                        cache[ term ] = data;
+                        response( data );
+                    }
+                );
+            }
+        });
+    }
 })(jQuery);

@@ -1,12 +1,20 @@
 package inlineLinkUpdates;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 
 public class InlineLink implements Serializable {
@@ -92,5 +100,63 @@ public class InlineLink implements Serializable {
     @Override
     public String toString() {
         return new ReflectionToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).toString();
+    }
+
+    public static boolean hasProperty(String property) {
+        Field[] fields = InlineLink.class.getDeclaredFields();
+        for(Field field : fields) {
+            if(field.getName().equals(property)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String getStringProperty(String stringPropertyName) {
+        BeanInfo beanInfo = null;
+        try {
+            beanInfo = Introspector.getBeanInfo(this.getClass());
+        } catch (IntrospectionException e) {
+//            e.printStackTrace();
+        }
+        PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+        for (int i = 0; i < propertyDescriptors.length; i++) {
+            PropertyDescriptor currentPropertyDescriptor = propertyDescriptors[i];
+            if (currentPropertyDescriptor.getName().equals(stringPropertyName)) {
+                Method readMethod = currentPropertyDescriptor.getReadMethod();
+                try {
+                    return (String)readMethod.invoke(this);
+                } catch (IllegalAccessException e) {
+//                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+//                    e.printStackTrace();
+                }
+            }
+
+        }
+        return null;
+    }
+
+    public static String convertToDbColumn(String propertyName) {
+        // convert camelCase to underscore
+        return propertyName.replaceAll("([a-z])([A-Z])", "$1_$2");
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        InlineLink other = (InlineLink) obj;
+        return new EqualsBuilder()
+                .append(topicName, other.getTopicName())
+                .append(topicUrl, other.getTopicUrl())
+                .append(priority, other.getPriority())
+                .append(topicTypeId, other.getTopicTypeId())
+                .append(numWordsInTopic, other.getNumWordsInTopic())
+                .append(site, other.getSite())
+                .isEquals();
     }
 }

@@ -30,6 +30,8 @@
 			<artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
 		</dependency>
+
+        <!-- utils.utils -->
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
@@ -46,7 +48,6 @@
         </dependency>
 
         <!-- db -->
-
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6</artifactId>
