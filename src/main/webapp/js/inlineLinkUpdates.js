@@ -1,3 +1,5 @@
+
+
 (function($){
     // auto completes
     var searchTopicId = $('#search .topicId input');
@@ -6,7 +8,7 @@
     var topicIdCache = {}, topicNameCache = {}, topicUrlCache = {};
     autoComplete(searchTopicId, "topicId", topicIdCache);
     autoComplete(searchTopicName, "topicName", topicNameCache);
-    autoComplete(searchTopicUrl, "topicUrl", topicUrlCache);
+//    autoComplete(searchTopicUrl, "topicUrl", topicUrlCache); // TODO select distinct needed in query if to pull this off
 
     // dialogs
     var editInlineLinkDialogDiv = $('#editInlineLinkDialog');

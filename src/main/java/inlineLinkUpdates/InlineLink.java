@@ -1,5 +1,6 @@
 package inlineLinkUpdates;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -27,8 +28,8 @@ public class InlineLink implements Serializable {
     private String topicUrl;
     @NotNull(message = "Priority may not be empty.")
     @Min(value = 1)
-    private Integer priority;
-    private Integer topicTypeId;
+    private Integer priority = 20;
+    private Integer topicTypeId = 2;
     private Integer numWordsInTopic;
     @NotEmpty(message = "Site may not be empty.")
     private String site;
@@ -158,5 +159,19 @@ public class InlineLink implements Serializable {
                 .append(numWordsInTopic, other.getNumWordsInTopic())
                 .append(site, other.getSite())
                 .isEquals();
+    }
+
+    public String getUniqueKey() {
+        return getTopicName() + "|" + getTopicUrl() + "|" + getSite();
+    }
+
+    public String getEscapedTopicNameForDb() {
+        return StringUtils.replace(getTopicName(), "'", "''");
+    }
+
+    public static int getWordsInTopicName(String topicName) {
+        // figure out words in topic name
+        String[] words = StringUtils.split(topicName, " ");
+        return words.length;
     }
 }
