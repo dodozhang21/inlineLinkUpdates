@@ -10,6 +10,7 @@ public class InlineLinkUpdatesPage implements Serializable {
     private InlineLink searchCriteria;
     private Pagination pagination;
     private List<InlineLink> results = new ArrayList<InlineLink>();
+    private String orderBy;
 
     public InlineLink getSearchCriteria() {
         return searchCriteria;
@@ -37,5 +38,13 @@ public class InlineLinkUpdatesPage implements Serializable {
 
     public void setResults(List<InlineLink> results) {
         this.results = results;
+    }
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
     }
 }

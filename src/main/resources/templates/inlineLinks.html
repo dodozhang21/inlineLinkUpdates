@@ -41,6 +41,20 @@
                 <input th:field="*{searchCriteria.topicUrl}" class="ui-corner-all" type="text" />
             </div>
 
+            <div class="priority">
+                <label th:for="${#ids.next('searchCriteria.priority')}">Priority:</label>
+                <input th:field="*{searchCriteria.priority}" class="ui-corner-all" type="text" />
+            </div>
+
+            <div class="orderBy">
+                <label th:for="${#ids.next('orderBy')}">Order By:</label>
+                <select th:field="*{orderBy}" class="ui-corner-all">
+                    <option th:each="choice : ${orderByChoices}"
+                            th:value="${choice.value}"
+                            th:text="${choice.text}"></option>
+                </select>
+            </div>
+
             <div class="buttons">
                 <input type="button" value="Clear All" class="clearAll ui-corner-all" role="button" />
                 <input type="submit" value="Search" class="ui-corner-all" role="button" />

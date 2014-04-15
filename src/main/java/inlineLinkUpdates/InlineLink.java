@@ -24,13 +24,18 @@ public class InlineLink implements Serializable {
 
     @NotEmpty(message = "Topic Name may not be empty.")
     private String topicName;
+
     @NotEmpty(message = "Topic URL may not be empty.")
     private String topicUrl;
-    @NotNull(message = "Priority may not be empty.")
+
+    @NotNull(message = "Priority may not be empty, or less than 1.")
     @Min(value = 1)
-    private Integer priority = 20;
+    private Integer priority;
+
     private Integer topicTypeId = 2;
+
     private Integer numWordsInTopic;
+
     @NotEmpty(message = "Site may not be empty.")
     private String site;
 

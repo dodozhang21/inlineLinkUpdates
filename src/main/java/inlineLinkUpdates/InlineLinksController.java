@@ -49,9 +49,20 @@ public class InlineLinksController {
         );
     }
 
+    @ModelAttribute("orderByChoices")
+    public List<SelectOption> orderByChoices() {
+        return Arrays.asList(
+                new SelectOption("priority asc", "Priority")
+                ,new SelectOption("topic_id asc", "Topic ID")
+                ,new SelectOption("topic_name asc", "Topic Name")
+        );
+    }
+
     @ModelAttribute("newInlineLink")
     public InlineLink newInlineLink() {
-        return new InlineLink();
+        InlineLink newInlineLink = new InlineLink();
+        newInlineLink.setPriority(20);
+        return newInlineLink;
     }
 
     @ModelAttribute("editInlineLink")
@@ -79,7 +90,7 @@ public class InlineLinksController {
             , final Model model) {
 
         page.getPagination().setCurrentPage(1);
-        List<InlineLink> results = inlineLinksService.searchInlineLinks(page.getSearchCriteria(), null, page.getPagination());
+        List<InlineLink> results = inlineLinksService.searchInlineLinks(page.getSearchCriteria(), page.getOrderBy(), page.getPagination());
         model.addAttribute("results", results);
         model.addAttribute("page", page);
 
@@ -91,14 +102,14 @@ public class InlineLinksController {
                             , @PathVariable int pageNumber
                             , final Model model) {
         page.getPagination().setCurrentPage(pageNumber);
-        List<InlineLink> results = inlineLinksService.searchInlineLinks(page.getSearchCriteria(), null, page.getPagination());
+        List<InlineLink> results = inlineLinksService.searchInlineLinks(page.getSearchCriteria(), page.getOrderBy(), page.getPagination());
         model.addAttribute("results", results);
 
         return "inlineLinks";
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/add")
-    public String search(@Valid @ModelAttribute("newInlineLink") InlineLink newInlineLink
+    public String add(@Valid @ModelAttribute("newInlineLink") InlineLink newInlineLink
             ,final BindingResult result
             ,final Model model) {
         if(result.hasErrors()) {
