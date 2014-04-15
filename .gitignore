@@ -4,3 +4,4 @@ node_modules
 bower_modules
 *.css
 .sass-cache
+src/main/webapp/js/js/
