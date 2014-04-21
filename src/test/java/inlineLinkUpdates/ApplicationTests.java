@@ -70,7 +70,7 @@ public class ApplicationTests {
 
         String sql = inlineLinksRepository.buildSql("select * from mdp_topic", parameters, null);
 
-        assertEquals("select * from mdp_topic where upper(topic_name) = upper(?) and upper(topic_id) = upper(?) order by topic_name asc", sql);
+        assertEquals("select * from mdp_topic where upper(topic_name) like upper(?) and upper(topic_id) = upper(?) order by topic_name asc", sql);
 	}
 
     @Test
@@ -95,7 +95,7 @@ public class ApplicationTests {
 
         String sql = inlineLinksRepository.buildSql("select * from mdp_topic", parameters, "topic_id desc, topic_name asc");
 
-        assertEquals("select * from mdp_topic where upper(topic_name) = upper(?) and upper(topic_id) = upper(?) order by topic_id desc, topic_name asc", sql);
+        assertEquals("select * from mdp_topic where upper(topic_name) like upper(?) and upper(topic_id) = upper(?) order by topic_id desc, topic_name asc", sql);
     }
 
     @Test

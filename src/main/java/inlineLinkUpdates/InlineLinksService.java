@@ -42,7 +42,7 @@ public class InlineLinksService {
             parameters.put("topic_id", searchCriteria.getTopicId());
         }
         if(StringUtils.isNotBlank(searchCriteria.getTopicName())) {
-            parameters.put("topic_name", searchCriteria.getTopicName());
+            parameters.put("topic_name", "%"+searchCriteria.getTopicName()+"%");
         }
         if(StringUtils.isNotBlank(searchCriteria.getTopicUrl())) {
             parameters.put("topic_url", searchCriteria.getTopicUrl());
