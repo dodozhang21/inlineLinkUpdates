@@ -21,7 +21,7 @@ module.exports = function(grunt) {
                 options: {
                     //config: 'config.rb'
                     sassDir: 'sass',
-                    cssDir: 'css',
+                    cssDir: '../resources/static/css',
                     specify: 'sass/*.scss',
                     outputStyle: 'compact'
                 }
@@ -44,10 +44,7 @@ module.exports = function(grunt) {
                 expand: true,
                 cwd: 'css/',
                 src: ['**/*.css', '!*.min.css'],
-                dest: '../css/',
-                rename:function(dest, src) { /* Using this instead of ext to support files containing more than one dot. https://github.com/gruntjs/grunt/pull/750 */
-                    return dest + src;
-                }
+                dest: '../resources/static/css/'
                 /*ext: '.css'*/
             }
         },
