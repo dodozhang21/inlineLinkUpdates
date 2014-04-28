@@ -29,8 +29,8 @@ public class SyncMdpTopicContext {
         DataSource dataSource = new DataSource();
         dataSource.setDriverClassName("oracle.jdbc.driver.OracleDriver");
         dataSource.setUrl("jdbc:oracle:thin:@(DESCRIPTION=(LOAD_BALANCE=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=pwebdb1dsm)(PORT=1521))(ADDRESS=(PROTOCOL=TCP)(HOST=pwebdb2dsm)(PORT=1521))(ADDRESS=(PROTOCOL=TCP)(HOST=pwebdb3dsm)(PORT=1521))(ADDRESS=(PROTOCOL=TCP)(HOST=pwebdb4dsm)(PORT=1521))(ADDRESS=(PROTOCOL=TCP)(HOST=pwebdb5dsm)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=papp.meredith.com)(FAILOVER_MODE=(TYPE=SELECT)(METHOD=BASIC))))");
-        dataSource.setUsername("yzhang");
-        dataSource.setPassword("yzhang99");
+        dataSource.setUsername("yourUsername");
+        dataSource.setPassword("yourPassword");
 
         return dataSource;
     }

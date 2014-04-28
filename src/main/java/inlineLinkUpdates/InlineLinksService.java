@@ -45,7 +45,7 @@ public class InlineLinksService {
             parameters.put("topic_name", "%"+searchCriteria.getTopicName()+"%");
         }
         if(StringUtils.isNotBlank(searchCriteria.getTopicUrl())) {
-            parameters.put("topic_url", searchCriteria.getTopicUrl());
+            parameters.put("topic_url", "%"+searchCriteria.getTopicUrl()+"%");
         }
         if(searchCriteria.getPriority() != null) {
             parameters.put("priority", String.valueOf(searchCriteria.getPriority()));

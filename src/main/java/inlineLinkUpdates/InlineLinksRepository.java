@@ -169,7 +169,7 @@ public class InlineLinksRepository {
         if(!parameters.isEmpty()) {
             List<String> whereClauses = new ArrayList<String>();
             for(String key : parameters.keySet()) {
-                if("topic_name".equals(key)){
+                if("topic_name".equals(key) || "topic_url".equals(key)){
                     whereClauses.add(String.format("upper(%s) like upper(?)", key));
                 }
                 else {

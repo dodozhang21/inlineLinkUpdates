@@ -3,8 +3,14 @@
   <component name="CompassSettings">
     <option name="compassExecutableFilePath" value="D:/CQ/Ruby193/bin/compass.bat" />
     <option name="compassSupportEnabled" value="true" />
+    <option name="importPaths">
+      <list>
+        <option value="D:/CQ/Ruby193/lib/ruby/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets" />
+        <option value="D:/CQ/Ruby193/lib/ruby/gems/1.9.1/gems/compass-0.12.2/frameworks/blueprint/stylesheets" />
+      </list>
+    </option>
   </component>
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="false">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_6" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
@@ -65,6 +71,7 @@
     <orderEntry type="library" name="Maven: org.jboss.logging:jboss-logging:3.1.3.GA" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml:classmate:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.oracle:ojdbc6:11.2.0.1.0" level="project" />
+    <orderEntry type="library" name="compass-library" level="project" />
   </component>
 </module>
 
