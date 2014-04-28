@@ -105,7 +105,7 @@ public class InlineLink implements Serializable {
 
     @Override
     public String toString() {
-        return new ReflectionToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).toString();
+        return new ReflectionToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).toString();
     }
 
     public static boolean hasProperty(String property) {

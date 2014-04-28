@@ -1,6 +1,7 @@
 package inlineLinkUpdates;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import java.util.Map;
 
 @Service
 public class InlineLinksService {
+    private static final Logger logger = Logger.getLogger(InlineLinksService.class);
     @Autowired
     private InlineLinksRepository inlineLinksRepository;
 
@@ -36,6 +38,7 @@ public class InlineLinksService {
     }
 
     public List<InlineLink> searchInlineLinks(InlineLink searchCriteria, String orderBy, Pagination pagination) {
+        logger.info("start searchInlineLinks");
         // convert to map
         Map<String, String> parameters = new HashMap<String, String>();
         if(StringUtils.isNotBlank(searchCriteria.getTopicId())) {
@@ -59,6 +62,8 @@ public class InlineLinksService {
         if(StringUtils.isNotBlank(searchCriteria.getSite())) {
             parameters.put("site", searchCriteria.getSite());
         }
+        logger.debug(searchCriteria.toString());
+        logger.info("end searchInlineLinks");
 
         return inlineLinksRepository.searchInlineLinks(parameters, orderBy, pagination);
     }
