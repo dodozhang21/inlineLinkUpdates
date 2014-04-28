@@ -6,3 +6,5 @@ bower_modules
 .sass-cache
 src/main/webapp/js/js/
 *.log
+config
+grunt.status

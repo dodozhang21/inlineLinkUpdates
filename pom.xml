@@ -83,10 +83,62 @@
 	<properties>
 		<start-class>inlineLinkUpdates.Application</start-class>
 		<java.version>1.6</java.version>
+        <grunt.resources.dir>src/main/webapp</grunt.resources.dir>
 	</properties>
 
 	<build>
 		<plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <target name="building">
+                                <echo>NPM INSTALL---------------</echo>
+                                <exec executable="cmd" dir="${grunt.resources.dir}"
+                                      osfamily="windows" failonerror="true">
+                                    <arg line="/c npm config set color false"/>
+                                </exec>
+                                <exec executable="bash" dir="${grunt.resources.dir}"
+                                      osfamily="unix" failonerror="true">
+                                    <arg line="npm config set color false"/>
+                                </exec>
+                                <exec executable="cmd" dir="${grunt.resources.dir}"
+                                      osfamily="windows" failonerror="true">
+                                    <arg line="/c npm install"/>
+                                </exec>
+                                <exec executable="bash" dir="${grunt.resources.dir}"
+                                      osfamily="unix" failonerror="true">
+                                    <arg line="npm install"/>
+                                </exec>
+
+
+                                <echo>GRUNT--------------------</echo>
+                                <exec executable="cmd" dir="${grunt.resources.dir}"
+                                      osfamily="windows" resultproperty="cmdresult" output="con">
+                                    <arg line="/c grunt --no-color > grunt.status"/>
+                                </exec>
+                                <exec executable="bash" dir="${grunt.resources.dir}"
+                                      osfamily="unix" resultproperty="cmdresult" output="con">
+                                    <arg line="grunt --no-color > grunt.status"/>
+                                </exec>
+                                <loadfile srcFile="${grunt.resources.dir}/grunt.status" property="grunt.status" />
+                                <echo>${grunt.status}</echo>
+                                <condition property="cmdsuccess">
+                                    <equals arg1="${cmdresult}" arg2="0"/>
+                                </condition>
+                                <fail unless="cmdsuccess"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

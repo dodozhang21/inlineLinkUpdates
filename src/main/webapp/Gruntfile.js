@@ -51,21 +51,6 @@ module.exports = function(grunt) {
                 /*ext: '.css'*/
             }
         },
-        uglify: {
-            options: {
-                banner: '<%= banner %>',
-                report: false /* change to 'gzip' to see gzipped sizes on local */
-            },
-            minify:{
-                expand: true,
-                src: ['js/**/*.js'],
-                dest: 'js/',
-                rename:function(dest, src) { /* Using this instead of ext to support files containing more than one dot. https://github.com/gruntjs/grunt/pull/750 */
-                    return dest + src;
-                }
-                /*ext: '.js'*/
-            }
-        },
         watch: {
           sassy: {
             files: ['sass/**/*.scss'],
@@ -89,7 +74,6 @@ module.exports = function(grunt) {
 
     // These plugins provide necessary tasks.
     grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-compass');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -98,7 +82,7 @@ module.exports = function(grunt) {
 
     // Default task.
     grunt.registerTask('local', ['clean', 'compass', 'browser_sync', 'watch']);
-    grunt.registerTask('default', ['clean', 'compass', 'uglify', 'cssmin']);
+    grunt.registerTask('default', ['clean', 'compass', 'cssmin']);
 
 
 };
