@@ -14,14 +14,14 @@ module.exports = function(grunt) {
             options: {
                 force: true
             },
-            files: ['css/']
+            files: ['css/', '../resources/static/']
         },
         compass: {
             dist: {
                 options: {
                     //config: 'config.rb'
                     sassDir: 'sass',
-                    cssDir: '../resources/static/css',
+                    cssDir: 'css',
                     specify: 'sass/*.scss',
                     outputStyle: 'compact'
                 }
@@ -46,6 +46,19 @@ module.exports = function(grunt) {
                 src: ['**/*.css', '!*.min.css'],
                 dest: '../resources/static/css/'
                 /*ext: '.css'*/
+            }
+        },
+
+        uglify: {
+            options: {
+                banner: '<%= banner %>',
+                report: false /* change to 'gzip' to see gzipped sizes on local */
+            },
+            minify:{
+                expand: true,
+                src: ['js/**/*.js'],
+                dest: '../resources/static/'
+                /*ext: '.js'*/
             }
         },
         watch: {
@@ -76,10 +89,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-browser-sync');
     grunt.loadNpmTasks('grunt-bower-task');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
 
     // Default task.
     grunt.registerTask('local', ['clean', 'compass', 'browser_sync', 'watch']);
-    grunt.registerTask('default', ['clean', 'compass', 'cssmin']);
+    grunt.registerTask('default', ['clean', 'compass', 'cssmin', 'uglify']);
 
 
 };
